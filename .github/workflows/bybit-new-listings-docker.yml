@@ -1,8 +1,4 @@
-steps:
-  - name: Checkout code
-    uses: actions/checkout@v4
-
-  # =========================================================
+ # =========================================================
   # 1. SETUP SSH AGENT (CRITICAL FIX FOR HANDSHAKE ERROR)
   # This step loads the Private Key from the GitHub secret into the runner's
   # SSH agent. This is the most reliable way to handle key-based authentication
