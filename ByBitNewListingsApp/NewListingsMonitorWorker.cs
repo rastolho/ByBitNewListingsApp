@@ -85,7 +85,7 @@ namespace ByBitNewListingsApp
             {
                 _logger.LogInformation("Found {count} new listing(s)", newListings.Count);
 
-                foreach (var item in newListings.OrderByDescending(n => n.PublishTime))
+                foreach (var item in newListings.OrderBy(n => n.PublishTime))
                 {
                     string message = FormatTelegramMessage(item);
                     await _telegramService.SendMessageAsync(message);
