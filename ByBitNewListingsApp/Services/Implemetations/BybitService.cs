@@ -2,6 +2,7 @@
 using ByBitNewListingsApp.Configuration;
 using ByBitNewListingsApp.Services.Interfaces;
 using ByBitNewListingsApp.Dtos;
+using System.Web;
 
 namespace ByBitNewListingsApp.Services.Implemetations
 {
@@ -23,7 +24,7 @@ namespace ByBitNewListingsApp.Services.Implemetations
         {
             try
             {
-                string url = $"{BaseUrl}/v5/announcements/index?locale={_settings.Locale}&limit=20";
+                string url = $"{BaseUrl}/v5/announcements/index?type=new_crypto&tag=Derivatives&locale={_settings.Locale}&limit=20";
 
                 _logger.LogInformation("Fetching news from Bybit API");
                 var response = await _httpClient.GetAsync(url);
