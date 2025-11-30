@@ -3,8 +3,10 @@ steps:
     uses: actions/checkout@v4
 
   # =========================================================
-  # 1. SETUP SSH AGENT (THE CRITICAL FIX)
-  # This loads the key into the runner's SSH agent for reliable use.
+  # 1. SETUP SSH AGENT (CRITICAL FIX FOR HANDSHAKE ERROR)
+  # This step loads the Private Key from the GitHub secret into the runner's
+  # SSH agent. This is the most reliable way to handle key-based authentication
+  # and fixes the 'handshake failed: attempted methods [none]' error.
   # =========================================================
   - name: Set up SSH agent
     uses: webfactory/ssh-agent@v0.9.0
@@ -13,7 +15,7 @@ steps:
       ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       
   # Add the Droplet's host key to the known hosts list.
-  # This prevents the initial "Are you sure you want to continue connecting?" prompt.
+  # This ensures the connection is trusted immediately without user interaction.
   - name: Add SSH Host Key to Known Hosts
     run: |
       ssh-keyscan ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
@@ -21,7 +23,7 @@ steps:
 
   # --- 2. BUILD PHASE (On GitHub Runner) ---
   
-  # Setup .NET SDK to BUILD the application (no longer needed on the VPS host)
+  # Setup .NET SDK to BUILD the application 
   - name: Setup .NET
     uses: actions/setup-dotnet@v4
     with:
@@ -30,17 +32,18 @@ steps:
   - name: Restore dependencies and Publish Application
     working-directory: ./ByBitNewListingsApp
     run: |
-      # The 'publish' command compiles the app into a self-contained folder
+      # Compiles the application into a self-contained publish folder
       dotnet publish -c Release -o ./publish --nologo
       
   # --- 3. DEPLOYMENT PHASE (Transfer to VPS) ---
   
-  # We transfer the source code and the application's required files (like the Dockerfile)
-  # NOTE: We switch to a basic SSH/SCP command structure because the key is already loaded!
+  # We use the standard 'scp' command, which automatically uses the key 
+  # loaded by the SSH agent in Step 1.
   - name: Transfer Files to VPS via SCP
     run: |
-      # The '-i' flag is no longer needed since the key is in the agent.
-      # The '-r' flag is for recursive copy.
+      # scp -o StrictHostKeyChecking=no tells scp to ignore host key warnings
+      # -r is for recursive copying
+      # We copy the entire publish folder contents and the Dockerfile
       scp -o StrictHostKeyChecking=no -r \
       ./ByBitNewListingsApp/publish/. \
       ./ByBitNewListingsApp/Dockerfile \
@@ -48,11 +51,12 @@ steps:
       
   # --- 4. RUN PHASE (On VPS Host via SSH) ---
   
-  # We can use a simple SSH run step now that the key is handled by the agent.
+  # We use the standard 'ssh' command to execute remote Docker commands.
   - name: Build and Run Docker Container on VPS
     run: |
-      # Define the SSH command to run on the server
+      # Define the SSH command to run on the server as a single string
       SSH_CMD="
+      # 1. Navigate to the deployment directory
       cd /var/www/bybit-monitor
       
       # 2. Build the Docker image (based on the Dockerfile we copied)
@@ -63,6 +67,7 @@ steps:
       docker rm bybit-monitor-container || true
       
       # 4. Run the new container, mounting a persistent volume for the state file!
+      # We use single quotes around the environment variable values to prevent shell interpolation.
       docker run -d --restart unless-stopped \
         --name bybit-monitor-container \
         -v /var/www/bybit-data:/app/data \
@@ -76,6 +81,5 @@ steps:
       docker logs bybit-monitor-container --tail 10
       "
       
-      # Execute the command on the remote server
-      # The key is automatically used by the SSH client.
+      # Execute the command on the remote server using the key provided by the agent
       ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "$SSH_CMD"
