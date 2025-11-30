@@ -28,7 +28,7 @@ jobs:
       - name: Add SSH Host Key to Known Hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -t rsa,ed25519 ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts || true
           chmod 700 ~/.ssh
           chmod 644 ~/.ssh/known_hosts
 
