@@ -50,7 +50,7 @@ jobs:
       # =========================================================
       - name: Transfer Files to VPS via SCP
         run: |
-          scp -r \
+          scp -r -o StrictHostKeyChecking=no \
             ./ByBitNewListingsApp/publish/* \
             ./ByBitNewListingsApp/Dockerfile \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/deployer/bybit-monitor/
@@ -63,12 +63,15 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} /bin/bash << ENDSSH
           set -e
           
           # Create directory if it doesn't exist
           mkdir -p /home/deployer/bybit-monitor
           cd /home/deployer/bybit-monitor
+          
+          echo "Pulling Docker base image..."
+          docker pull mcr.microsoft.com/dotnet/aspnet:9.0
           
           echo "Building Docker image..."
           docker build -t bybit-monitor-image .
@@ -77,12 +80,12 @@ jobs:
           docker stop bybit-monitor-container 2>/dev/null || true
           docker rm bybit-monitor-container 2>/dev/null || true
           
-          echo "Starting new container..."
+          echo "Starting new container with environment variables..."
           docker run -d --restart unless-stopped \
             --name bybit-monitor-container \
             -v /home/deployer/bybit-data:/app/data \
-            -e TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN}" \
-            -e TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID}" \
+            -e TELEGRAM_BOT_TOKEN="$TELEGRAM_BOT_TOKEN" \
+            -e TELEGRAM_CHAT_ID="$TELEGRAM_CHAT_ID" \
             -e LOCALE="en-US" \
             -e CHECK_INTERVAL_SECONDS="60" \
             bybit-monitor-image
