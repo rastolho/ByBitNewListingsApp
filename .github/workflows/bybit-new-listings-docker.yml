@@ -1,81 +1,90 @@
- # =========================================================
-  # 1. SETUP SSH AGENT (CRITICAL FIX FOR HANDSHAKE ERROR)
-  # This step loads the Private Key from the GitHub secret into the runner's
-  # SSH agent. This is the most reliable way to handle key-based authentication
-  # and fixes the 'handshake failed: attempted methods [none]' error.
-  # =========================================================
-  - name: Set up SSH agent
-    uses: webfactory/ssh-agent@v0.9.0
-    with:
-      # The Private Key is passed directly to the agent
-      ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      
-  # Add the Droplet's host key to the known hosts list.
-  # This ensures the connection is trusted immediately without user interaction.
-  - name: Add SSH Host Key to Known Hosts
-    run: |
-      ssh-keyscan ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
-      chmod 644 ~/.ssh/known_hosts
+name: Deploy ByBit Monitor to VPS
 
-  # --- 2. BUILD PHASE (On GitHub Runner) ---
-  
-  # Setup .NET SDK to BUILD the application 
-  - name: Setup .NET
-    uses: actions/setup-dotnet@v4
-    with:
-      dotnet-version: '9.0.x'
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-  - name: Restore dependencies and Publish Application
-    working-directory: ./ByBitNewListingsApp
-    run: |
-      # Compiles the application into a self-contained publish folder
-      dotnet publish -c Release -o ./publish --nologo
-      
-  # --- 3. DEPLOYMENT PHASE (Transfer to VPS) ---
-  
-  # We use the standard 'scp' command, which automatically uses the key 
-  # loaded by the SSH agent in Step 1.
-  - name: Transfer Files to VPS via SCP
-    run: |
-      # scp -o StrictHostKeyChecking=no tells scp to ignore host key warnings
-      # -r is for recursive copying
-      # We copy the entire publish folder contents and the Dockerfile
-      scp -o StrictHostKeyChecking=no -r \
-      ./ByBitNewListingsApp/publish/. \
-      ./ByBitNewListingsApp/Dockerfile \
-      ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/var/www/bybit-monitor/
-      
-  # --- 4. RUN PHASE (On VPS Host via SSH) ---
-  
-  # We use the standard 'ssh' command to execute remote Docker commands.
-  - name: Build and Run Docker Container on VPS
-    run: |
-      # Define the SSH command to run on the server as a single string
-      SSH_CMD="
-      # 1. Navigate to the deployment directory
-      cd /var/www/bybit-monitor
-      
-      # 2. Build the Docker image (based on the Dockerfile we copied)
-      docker build -t bybit-monitor-image .
-      
-      # 3. Stop and remove any previous container instances
-      docker stop bybit-monitor-container || true
-      docker rm bybit-monitor-container || true
-      
-      # 4. Run the new container, mounting a persistent volume for the state file!
-      # We use single quotes around the environment variable values to prevent shell interpolation.
-      docker run -d --restart unless-stopped \
-        --name bybit-monitor-container \
-        -v /var/www/bybit-data:/app/data \
-        -e TELEGRAM_BOT_TOKEN='${{ secrets.TELEGRAM_BOT_TOKEN }}' \
-        -e TELEGRAM_CHAT_ID='${{ secrets.TELEGRAM_CHAT_ID }}' \
-        -e LOCALE='en-US' \
-        -e CHECK_INTERVAL_SECONDS='60' \
-        bybit-monitor-image
-      
-      # Optional: Check the container logs briefly to confirm success
-      docker logs bybit-monitor-container --tail 10
-      "
-      
-      # Execute the command on the remote server using the key provided by the agent
-      ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "$SSH_CMD"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # =========================================================
+      # 1. CHECKOUT CODE
+      # =========================================================
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # =========================================================
+      # 2. SETUP SSH AGENT
+      # =========================================================
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add SSH Host Key to Known Hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/known_hosts
+
+      # =========================================================
+      # 3. BUILD PHASE
+      # =========================================================
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies and Publish Application
+        working-directory: ./ByBitNewListingsApp
+        run: |
+          dotnet publish -c Release -o ./publish --nologo
+
+      # =========================================================
+      # 4. DEPLOYMENT PHASE - Transfer Files
+      # =========================================================
+      - name: Transfer Files to VPS via SCP
+        run: |
+          scp -r \
+            ./ByBitNewListingsApp/publish/* \
+            ./ByBitNewListingsApp/Dockerfile \
+            ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/var/www/bybit-monitor/
+
+      # =========================================================
+      # 5. RUN PHASE - Build and Deploy Docker Container
+      # =========================================================
+      - name: Build and Run Docker Container on VPS
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} << 'ENDSSH'
+            set -e
+            
+            cd /var/www/bybit-monitor
+            
+            echo "Building Docker image..."
+            docker build -t bybit-monitor-image .
+            
+            echo "Stopping old container..."
+            docker stop bybit-monitor-container 2>/dev/null || true
+            docker rm bybit-monitor-container 2>/dev/null || true
+            
+            echo "Starting new container..."
+            docker run -d --restart unless-stopped \
+              --name bybit-monitor-container \
+              -v /var/www/bybit-data:/app/data \
+              -e TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN}" \
+              -e TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID}" \
+              -e LOCALE="en-US" \
+              -e CHECK_INTERVAL_SECONDS="60" \
+              bybit-monitor-image
+            
+            echo "Deployment complete! Container logs:"
+            docker logs bybit-monitor-container --tail 10
+          ENDSSH
