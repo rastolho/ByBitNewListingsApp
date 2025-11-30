@@ -52,4 +52,4 @@ jobs:
         if: always()
         with:
           path: seen_news.json
-          key: bybit-news-state-${{ github.run_id }}
+          key: bybit-news-state
