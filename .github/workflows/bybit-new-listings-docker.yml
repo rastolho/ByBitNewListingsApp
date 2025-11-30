@@ -1,81 +1,81 @@
-name: Bybit News Monitor - Docker Deployment
+steps:
+  - name: Checkout code
+    uses: actions/checkout@v4
 
-on:
-  schedule:
-    - cron: '*/5 * * * *'
-  workflow_dispatch:
-
-jobs:
-  build_and_deploy:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # --- 1. BUILD PHASE (On GitHub Runner) ---
+  # =========================================================
+  # 1. SETUP SSH AGENT (THE CRITICAL FIX)
+  # This loads the key into the runner's SSH agent for reliable use.
+  # =========================================================
+  - name: Set up SSH agent
+    uses: webfactory/ssh-agent@v0.9.0
+    with:
+      # The Private Key is passed directly to the agent
+      ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       
-      # Setup .NET SDK to BUILD the application (no longer needed on the VPS host)
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.0.x'
+  # Add the Droplet's host key to the known hosts list.
+  # This prevents the initial "Are you sure you want to continue connecting?" prompt.
+  - name: Add SSH Host Key to Known Hosts
+    run: |
+      ssh-keyscan ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+      chmod 644 ~/.ssh/known_hosts
 
-      - name: Restore dependencies and Publish Application
-        working-directory: ./ByBitNewListingsApp
-        run: |
-          # The 'publish' command compiles the app into a self-contained folder
-          dotnet publish -c Release -o ./publish --nologo
+  # --- 2. BUILD PHASE (On GitHub Runner) ---
+  
+  # Setup .NET SDK to BUILD the application (no longer needed on the VPS host)
+  - name: Setup .NET
+    uses: actions/setup-dotnet@v4
+    with:
+      dotnet-version: '9.0.x'
 
-      # --- 2. DEPLOYMENT PHASE (Transfer to VPS) ---
+  - name: Restore dependencies and Publish Application
+    working-directory: ./ByBitNewListingsApp
+    run: |
+      # The 'publish' command compiles the app into a self-contained folder
+      dotnet publish -c Release -o ./publish --nologo
       
-      # We transfer the source code and the application's required files (like the Dockerfile)
-      - name: Transfer Files to VPS via SCP
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          # Source: Copy the app folder, the Dockerfile, and the .json state file
-          source: "./ByBitNewListingsApp/publish/., ./ByBitNewListingsApp/Dockerfile" 
-          # Target: The persistent directory on the VPS
-          target: "/var/www/bybit-monitor" 
-          strip_components: 1 # Removes the leading directory structure during copy
-          
-      # --- 3. RUN PHASE (On VPS Host via SSH) ---
+  # --- 3. DEPLOYMENT PHASE (Transfer to VPS) ---
+  
+  # We transfer the source code and the application's required files (like the Dockerfile)
+  # NOTE: We switch to a basic SSH/SCP command structure because the key is already loaded!
+  - name: Transfer Files to VPS via SCP
+    run: |
+      # The '-i' flag is no longer needed since the key is in the agent.
+      # The '-r' flag is for recursive copy.
+      scp -o StrictHostKeyChecking=no -r \
+      ./ByBitNewListingsApp/publish/. \
+      ./ByBitNewListingsApp/Dockerfile \
+      ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/var/www/bybit-monitor/
       
-      - name: Build and Run Docker Container on VPS
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # 1. Navigate to the deployment directory
-            cd /var/www/bybit-monitor
-            
-            # 2. Build the Docker image (based on the Dockerfile we copied)
-            docker build -t bybit-monitor-image .
-            
-            # 3. Stop and remove any previous container instances
-            docker stop bybit-monitor-container || true
-            docker rm bybit-monitor-container || true
-            
-            # 4. Run the new container, mounting a persistent volume for the state file!
-            #    -d: detached mode (runs in background)
-            #    --name: assign a persistent name
-            #    --env: pass the secrets (ENVIRONMENT VARIABLES) securely
-            #    -v: VOLUME MOUNT: Ensures seen_news.json state persists across runs
-            
-            docker run -d --restart unless-stopped \
-              --name bybit-monitor-container \
-              -v /var/www/bybit-data:/app/data \
-              -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} \
-              -e TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }} \
-              -e LOCALE='en-US' \
-              -e CHECK_INTERVAL_SECONDS='60' \
-              bybit-monitor-image
-              
-            # Optional: Check the container logs briefly to confirm success
-            docker logs bybit-monitor-container --tail 10
+  # --- 4. RUN PHASE (On VPS Host via SSH) ---
+  
+  # We can use a simple SSH run step now that the key is handled by the agent.
+  - name: Build and Run Docker Container on VPS
+    run: |
+      # Define the SSH command to run on the server
+      SSH_CMD="
+      cd /var/www/bybit-monitor
+      
+      # 2. Build the Docker image (based on the Dockerfile we copied)
+      docker build -t bybit-monitor-image .
+      
+      # 3. Stop and remove any previous container instances
+      docker stop bybit-monitor-container || true
+      docker rm bybit-monitor-container || true
+      
+      # 4. Run the new container, mounting a persistent volume for the state file!
+      docker run -d --restart unless-stopped \
+        --name bybit-monitor-container \
+        -v /var/www/bybit-data:/app/data \
+        -e TELEGRAM_BOT_TOKEN='${{ secrets.TELEGRAM_BOT_TOKEN }}' \
+        -e TELEGRAM_CHAT_ID='${{ secrets.TELEGRAM_CHAT_ID }}' \
+        -e LOCALE='en-US' \
+        -e CHECK_INTERVAL_SECONDS='60' \
+        bybit-monitor-image
+      
+      # Optional: Check the container logs briefly to confirm success
+      docker logs bybit-monitor-container --tail 10
+      "
+      
+      # Execute the command on the remote server
+      # The key is automatically used by the SSH client.
+      ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "$SSH_CMD"
