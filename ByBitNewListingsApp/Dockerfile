@@ -1,5 +1,5 @@
 ﻿
-FROM mcr.microsoft.com/dotnet/runtime-deps:9.0-jammy AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 
 WORKDIR /app
 
