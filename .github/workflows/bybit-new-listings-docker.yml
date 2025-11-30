@@ -9,7 +9,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       # =========================================================
       # 1. CHECKOUT CODE
@@ -28,7 +28,7 @@ jobs:
       - name: Add SSH Host Key to Known Hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/known_hosts
 
@@ -53,7 +53,7 @@ jobs:
           scp -r \
             ./ByBitNewListingsApp/publish/* \
             ./ByBitNewListingsApp/Dockerfile \
-            ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/var/www/bybit-monitor/
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/deployer/bybit-monitor/
 
       # =========================================================
       # 5. RUN PHASE - Build and Deploy Docker Container
@@ -63,28 +63,30 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} << 'ENDSSH'
-            set -e
-            
-            cd /var/www/bybit-monitor
-            
-            echo "Building Docker image..."
-            docker build -t bybit-monitor-image .
-            
-            echo "Stopping old container..."
-            docker stop bybit-monitor-container 2>/dev/null || true
-            docker rm bybit-monitor-container 2>/dev/null || true
-            
-            echo "Starting new container..."
-            docker run -d --restart unless-stopped \
-              --name bybit-monitor-container \
-              -v /var/www/bybit-data:/app/data \
-              -e TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN}" \
-              -e TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID}" \
-              -e LOCALE="en-US" \
-              -e CHECK_INTERVAL_SECONDS="60" \
-              bybit-monitor-image
-            
-            echo "Deployment complete! Container logs:"
-            docker logs bybit-monitor-container --tail 10
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+          set -e
+          
+          # Create directory if it doesn't exist
+          mkdir -p /home/deployer/bybit-monitor
+          cd /home/deployer/bybit-monitor
+          
+          echo "Building Docker image..."
+          docker build -t bybit-monitor-image .
+          
+          echo "Stopping old container..."
+          docker stop bybit-monitor-container 2>/dev/null || true
+          docker rm bybit-monitor-container 2>/dev/null || true
+          
+          echo "Starting new container..."
+          docker run -d --restart unless-stopped \
+            --name bybit-monitor-container \
+            -v /home/deployer/bybit-data:/app/data \
+            -e TELEGRAM_BOT_TOKEN="${TELEGRAM_BOT_TOKEN}" \
+            -e TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID}" \
+            -e LOCALE="en-US" \
+            -e CHECK_INTERVAL_SECONDS="60" \
+            bybit-monitor-image
+          
+          echo "Deployment complete! Container logs:"
+          docker logs bybit-monitor-container --tail 10
           ENDSSH
