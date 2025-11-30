@@ -1,0 +1,266 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CAD86C4E-AE75-4EC9-B491-EC1C690EE02F}|NewFolder1{CAD86C4E-AE75-4EC9-B491-EC1C690EE02F}|C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\bybit-monitor.yaml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{CAD86C4E-AE75-4EC9-B491-EC1C690EE02F}|NewFolder1{CAD86C4E-AE75-4EC9-B491-EC1C690EE02F}|solutionrelative:bybit-monitor.yaml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\services\\implemetations\\telegramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\services\\implemetations\\telegramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\configuration\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\configuration\\appsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\dtos\\announcementresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\dtos\\announcementresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\dtos\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\dtos\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\dtos\\listing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\dtos\\listing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\services\\implemetations\\newlistingsstorageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\services\\implemetations\\newlistingsstorageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\services\\implemetations\\bybitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\services\\implemetations\\bybitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\services\\interfaces\\itelegramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\services\\interfaces\\itelegramservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\services\\interfaces\\inewlistingsstorageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\services\\interfaces\\inewlistingsstorageservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\services\\interfaces\\ibybitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\services\\interfaces\\ibybitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|c:\\users\\pedro\\repos\\bybitnewlistingsapp\\bybitnewlistingsapp\\bybitnewlistingsapp\\newlistingsmonitorworker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{926DA772-97BC-4B62-B3C0-C01B170AFC94}|ByBitNewListingsApp\\ByBitNewListingsApp.csproj|solutionrelative:bybitnewlistingsapp\\newlistingsmonitorworker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "bybit-monitor.yaml",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\bybit-monitor.yaml",
+              "RelativeDocumentMoniker": "bybit-monitor.yaml",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\bybit-monitor.yaml",
+              "RelativeToolTip": "bybit-monitor.yaml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACsAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2025-11-30T11:12:54.594Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AppSettings.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Configuration\\AppSettings.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Configuration\\AppSettings.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Configuration\\AppSettings.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Configuration\\AppSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T11:00:28.679Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ApiResponse.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Dtos\\ApiResponse.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Dtos\\ApiResponse.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Dtos\\ApiResponse.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Dtos\\ApiResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAwAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T11:00:00.353Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AnnouncementResult.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Dtos\\AnnouncementResult.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Dtos\\AnnouncementResult.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Dtos\\AnnouncementResult.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Dtos\\AnnouncementResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAoAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:59:39.287Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Listing.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Dtos\\Listing.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Dtos\\Listing.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Dtos\\Listing.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Dtos\\Listing.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:59:02.628Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ITelegramService.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Interfaces\\ITelegramService.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Services\\Interfaces\\ITelegramService.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Interfaces\\ITelegramService.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Services\\Interfaces\\ITelegramService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:57:44.183Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TelegramService.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Implemetations\\TelegramService.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Services\\Implemetations\\TelegramService.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Implemetations\\TelegramService.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Services\\Implemetations\\TelegramService.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAUwB8AAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:57:30.071Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IBybitService.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Interfaces\\IBybitService.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Services\\Interfaces\\IBybitService.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Interfaces\\IBybitService.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Services\\Interfaces\\IBybitService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:55:37.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "BybitService.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Implemetations\\BybitService.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Services\\Implemetations\\BybitService.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Implemetations\\BybitService.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Services\\Implemetations\\BybitService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:55:16.903Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "INewListingsStorageService.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Interfaces\\INewListingsStorageService.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Services\\Interfaces\\INewListingsStorageService.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Interfaces\\INewListingsStorageService.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Services\\Interfaces\\INewListingsStorageService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:54:27.39Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "NewListingsStorageService.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Implemetations\\NewListingsStorageService.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Services\\Implemetations\\NewListingsStorageService.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Services\\Implemetations\\NewListingsStorageService.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Services\\Implemetations\\NewListingsStorageService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:53:25.705Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Program.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Program.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Program.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:50:48.28Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Dockerfile",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\Dockerfile",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\Dockerfile",
+              "RelativeToolTip": "ByBitNewListingsApp\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-30T10:50:45.076Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "NewListingsMonitorWorker.cs",
+              "DocumentMoniker": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\NewListingsMonitorWorker.cs",
+              "RelativeDocumentMoniker": "ByBitNewListingsApp\\NewListingsMonitorWorker.cs",
+              "ToolTip": "C:\\Users\\pedro\\repos\\ByBitNewListingsApp\\ByBitNewListingsApp\\ByBitNewListingsApp\\NewListingsMonitorWorker.cs",
+              "RelativeToolTip": "ByBitNewListingsApp\\NewListingsMonitorWorker.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAQwAYAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-30T10:51:52.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
