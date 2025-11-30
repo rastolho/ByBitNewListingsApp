@@ -1,0 +1,82 @@
+name: Bybit News Monitor - Docker Deployment
+
+on:
+  # Runs every 5 minutes
+  schedule:
+    - cron: '*/5 * * * *'
+  # Allows manual triggering from the GitHub UI
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    # Enforce a timeout to prevent stuck jobs from consuming minutes
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # --- 1. BUILD PHASE (On GitHub Runner) ---
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies and Publish Application
+        working-directory: ./ByBitNewListingsApp
+        run: |
+          # Publish creates a self-contained folder containing the app and its dependencies (no SDK needed on VPS)
+          dotnet publish -c Release -o ./publish --nologo
+
+      # --- 2. DEPLOYMENT PHASE (Transfer to VPS) ---
+      
+      # Use SCP to securely transfer the published app and the Dockerfile
+      - name: Transfer Files to VPS via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Source: Copy the app folder (./publish) and the Dockerfile
+          source: "./ByBitNewListingsApp/publish/., ./ByBitNewListingsApp/Dockerfile" 
+          # Target: The persistent directory on the VPS
+          target: "/var/www/bybit-monitor" 
+          strip_components: 1 
+          
+      # --- 3. RUN PHASE (On VPS Host via SSH) ---
+      
+      - name: Build and Run Docker Container on VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # 1. Navigate to the deployment directory
+            cd /var/www/bybit-monitor
+            
+            # 2. Build the Docker image 
+            # The Dockerfile we just copied is used here.
+            docker build -t bybit-monitor-image .
+            
+            # 3. Stop and remove any previous container instances
+            # '|| true' prevents the job from failing if the container doesn't exist yet
+            docker stop bybit-monitor-container || true
+            docker rm bybit-monitor-container || true
+            
+            # 4. Run the new container, mounting the persistent volume for state!
+            # -v /var/www/bybit-data:/app/data maps the host directory to the container directory.
+            docker run -d --restart unless-stopped \
+              --name bybit-monitor-container \
+              -v /var/www/bybit-data:/app/data \
+              -e TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }} \
+              -e TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }} \
+              -e LOCALE='en-US' \
+              -e CHECK_INTERVAL_SECONDS='60' \
+              bybit-monitor-image
+              
+            # Optional: Check the container logs briefly to confirm success
+            echo "Deployment finished. Checking last 10 lines of logs:"
+            docker logs bybit-monitor-container --tail 10
