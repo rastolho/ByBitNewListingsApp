@@ -1,0 +1,47 @@
+name: Bybit News Monitor
+
+on:
+  schedule:
+    # Run every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # Manual trigger button
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      
+      - name: Restore dependencies
+        run: dotnet restore
+      
+      - name: Download previous state
+        uses: actions/cache/restore@v3
+        with:
+          path: seen_news.json
+          key: bybit-news-state
+          restore-keys: bybit-news-state
+      
+      - name: Run News Monitor
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          LOCALE: 'en-US'
+          CHECK_INTERVAL_SECONDS: '60'
+        run: |
+          timeout 4m dotnet run || true
+      
+      - name: Save state
+        uses: actions/cache/save@v3
+        if: always()
+        with:
+          path: seen_news.json
+          key: bybit-news-state
