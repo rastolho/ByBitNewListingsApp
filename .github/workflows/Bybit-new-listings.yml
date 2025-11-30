@@ -2,9 +2,8 @@ name: Bybit News Monitor
 
 on:
   schedule:
-    # Run every 5 minutes
     - cron: '*/5 * * * *'
-  workflow_dispatch:  # Manual trigger button
+  workflow_dispatch:
 
 jobs:
   monitor:
@@ -21,18 +20,29 @@ jobs:
           dotnet-version: '9.0.x'
       
       - name: Restore dependencies
+        working-directory: ./ByBitNewListingsApp
         run: dotnet restore
       
-      - name: Download previous state
+      - name: Restore cached state
         uses: actions/cache/restore@v3
         continue-on-error: true
         with:
-          path: seen_news.json
-          key: bybit-news-state-${{ github.run_id }}
-          restore-keys: |
-            bybit-news-state-
+          path: ByBitNewListingsApp/seen_news.json
+          key: bybit-news-state
+      
+      - name: Create initial state file if not exists
+        working-directory: ./ByBitNewListingsApp
+        run: |
+          if [ ! -f seen_news.json ]; then
+            echo "[]" > seen_news.json
+            echo "Created new seen_news.json file"
+          else
+            echo "Restored existing seen_news.json file"
+            cat seen_news.json
+          fi
       
       - name: Run News Monitor
+        working-directory: ./ByBitNewListingsApp
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -41,15 +51,24 @@ jobs:
         run: |
           timeout 4m dotnet run || true
       
-      - name: Ensure state file exists
-        run: |
-          if [ ! -f seen_news.json ]; then
-            echo "[]" > seen_news.json
-          fi
-      
-      - name: Save state
-        uses: actions/cache/save@v3
+      - name: Display updated state
         if: always()
+        working-directory: ./ByBitNewListingsApp
+        run: |
+          echo "Updated state file:"
+          cat seen_news.json || echo "File not found"
+      
+      - name: Delete old cache
+        if: always()
+        continue-on-error: true
+        run: |
+          gh cache delete "bybit-news-state" --confirm || echo "No cache to delete"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Save state to cache
+        if: always()
+        uses: actions/cache/save@v3
         with:
-          path: seen_news.json
+          path: ByBitNewListingsApp/seen_news.json
           key: bybit-news-state
