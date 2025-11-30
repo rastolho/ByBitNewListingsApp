@@ -25,10 +25,12 @@ jobs:
       
       - name: Download previous state
         uses: actions/cache/restore@v3
+        continue-on-error: true
         with:
           path: seen_news.json
-          key: bybit-news-state
-          restore-keys: bybit-news-state
+          key: bybit-news-state-${{ github.run_id }}
+          restore-keys: |
+            bybit-news-state-
       
       - name: Run News Monitor
         env:
@@ -39,9 +41,15 @@ jobs:
         run: |
           timeout 4m dotnet run || true
       
+      - name: Ensure state file exists
+        run: |
+          if [ ! -f seen_news.json ]; then
+            echo "[]" > seen_news.json
+          fi
+      
       - name: Save state
         uses: actions/cache/save@v3
         if: always()
         with:
           path: seen_news.json
-          key: bybit-news-state
+          key: bybit-news-state-${{ github.run_id }}
