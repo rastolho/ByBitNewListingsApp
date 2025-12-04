@@ -1,24 +1,19 @@
 name: Deploy ByBit Monitor to VPS
-
 on:
   push:
     branches:
       - main
   workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'  # Run every hour at minute 0
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       # =========================================================
       # 1. CHECKOUT CODE
       # =========================================================
       - name: Checkout repository
         uses: actions/checkout@v4
-
       # =========================================================
       # 2. SETUP SSH AGENT
       # =========================================================
@@ -26,14 +21,12 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
       - name: Add SSH Host Key to Known Hosts
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts || true
           chmod 700 ~/.ssh
           chmod 644 ~/.ssh/known_hosts
-
       # =========================================================
       # 3. BUILD PHASE
       # =========================================================
@@ -41,12 +34,10 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-
       - name: Restore dependencies and Publish Application
         working-directory: ./ByBitNewListingsApp
         run: |
           dotnet publish -c Release -o ./publish --nologo
-
       # =========================================================
       # 4. DEPLOYMENT PHASE - Transfer Files
       # =========================================================
@@ -56,7 +47,6 @@ jobs:
             ./ByBitNewListingsApp/publish/* \
             ./ByBitNewListingsApp/Dockerfile \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/deployer/bybit-monitor/
-
       # =========================================================
       # 5. RUN PHASE - Build and Deploy Docker Container
       # =========================================================
@@ -94,4 +84,27 @@ jobs:
           
           echo "Deployment complete! Container logs:"
           docker logs bybit-monitor-container --tail 10
+          ENDSSH
+      # =========================================================
+      # 6. SETUP CRON JOB ON VPS
+      # =========================================================
+      - name: Setup Cron Job to Run Worker Every Hour
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} /bin/bash << ENDSSH
+          set -e
+          
+          # Create a script that will run your worker
+          cat > /home/deployer/run-worker.sh << 'EOF'
+          #!/bin/bash
+          cd /home/deployer/bybit-monitor
+          docker exec bybit-monitor-container /app/ByBitNewListingsApp
+          EOF
+          
+          chmod +x /home/deployer/run-worker.sh
+          
+          # Add cron job if it doesn't exist
+          (crontab -l 2>/dev/null | grep -q "run-worker.sh") || \
+          (crontab -l 2>/dev/null; echo "0 * * * * /home/deployer/run-worker.sh >> /home/deployer/bybit-worker.log 2>&1") | crontab -
+          
+          echo "Cron job installed successfully"
           ENDSSH
