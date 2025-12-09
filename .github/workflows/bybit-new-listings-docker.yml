@@ -85,26 +85,3 @@ jobs:
           echo "Deployment complete! Container logs:"
           docker logs bybit-monitor-container --tail 10
           ENDSSH
-      # =========================================================
-      # 6. SETUP CRON JOB ON VPS
-      # =========================================================
-      - name: Setup Cron Job to Run Worker Every Hour
-        run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} /bin/bash << ENDSSH
-          set -e
-          
-          # Create a script that will run your worker
-          cat > /home/deployer/run-worker.sh << 'EOF'
-          #!/bin/bash
-          cd /home/deployer/bybit-monitor
-          docker exec bybit-monitor-container /app/ByBitNewListingsApp
-          EOF
-          
-          chmod +x /home/deployer/run-worker.sh
-          
-          # Add cron job if it doesn't exist
-          (crontab -l 2>/dev/null | grep -q "run-worker.sh") || \
-          (crontab -l 2>/dev/null; echo "0 * * * * /home/deployer/run-worker.sh >> /home/deployer/bybit-worker.log 2>&1") | crontab -
-          
-          echo "Cron job installed successfully"
-          ENDSSH
